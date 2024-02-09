@@ -19,6 +19,8 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import static org.junit.Assert.*;
 
 public class ContinuousIntegrationServerTest {
+    public static final int ERROR = -1;
+    public static final int ERRNONE = 0; 
 
     //This is all setup
     Main main = new Main();
@@ -81,6 +83,22 @@ public class ContinuousIntegrationServerTest {
         String actual = main.getGitHubRepoURL(gitPushPayload);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCloneGoodRepo() {
+        String URL = "https://github.com/VinterSallad/ci-server-group11";
+        int cloning_result = main.cloneRepo(URL); 
+
+        assertEquals(ERRNONE, cloning_result);
+    }
+
+    @Test
+    public void testCloneInexistantRepo() {
+        String URL = "https://github.com/VinterSallad/ci-server-group1111111";
+        int cloning_result = main.cloneRepo(URL); 
+
+        assertEquals(ERROR, cloning_result);
     }
 
 }
