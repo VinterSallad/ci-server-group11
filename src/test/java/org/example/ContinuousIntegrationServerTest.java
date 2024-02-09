@@ -24,6 +24,7 @@ public class ContinuousIntegrationServerTest {
 
     //This is all setup
     Main main = new Main();
+    CompileTest compileTest = new CompileTest(); 
     BufferedReader inputReaderPush;
     BufferedReader inputReaderPing;
     {
@@ -103,15 +104,15 @@ public class ContinuousIntegrationServerTest {
 
     @Test
     public void dummy(){
-        assertTrue(false); //change to false to see what happens when not all test pass
+        assertTrue(true); //change to false to see what happens when not all test pass
     }
 
     //@Test
     public void testCompileAndTest(){
         String URL = "https://github.com/VinterSallad/ci-server-group11";
         main.cloneRepo(URL); 
-        String out = CompileTest.compileAndTest(); 
-        assertEquals("", out); 
+        String out = compileTest.compileAndTest(); 
+        assertEquals(CompileTest.PASSED, out); 
     }
 
 }
