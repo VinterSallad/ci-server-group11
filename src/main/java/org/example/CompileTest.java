@@ -13,7 +13,18 @@ public class CompileTest {
     public static final String CFAILED = "Compilation failed"; 
     public static final String OTHER = "Could not find repo"; 
 
-
+    /**
+     * Compiles and tests a project located in the repo folder Main.REPO_FOLDER.
+     * This method uses Maven to build the project and checks for compilation errors
+     * and test failures. After compilation and testing, it deletes the repository folder.
+     * 
+     * @return A string indicating the result of the compilation and testing process.
+     *         Possible return values are:
+     *         - "PASSED" if the project compiled and passed all tests successfully.
+     *         - "CFAILED" if there were compilation errors in the project.
+     *         - "TFAILED" if there were test failures in the project.
+     *         - "OTHER" if there was an unexpected error during the process.
+     */
     public String compileAndTest() {
         File project_folder = new File(Main.REPO_FOLDER);
         String result = OTHER; 
