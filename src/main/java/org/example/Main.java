@@ -65,7 +65,7 @@ public class Main extends AbstractHandler {
      * @param repo the URL of the Git repository to clone
      * @return ERRNONE if the repository is cloned successfully, ERROR otherwise
      */
-    public static int cloneRepo(String repo){
+    public int cloneRepo(String repo){
         System.out.println("Cloning repository "+ repo);
         try {
             String currentDir = System.getProperty("user.dir");
