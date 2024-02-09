@@ -21,6 +21,8 @@ public class Main extends AbstractHandler {
     public static final int ERRNONE = 0; 
     public static final String REPO_FOLDER = "repo"; 
 
+    CompileTest compileTest = new CompileTest(); 
+
     /**
      * converts the bufferedreader optimally that comes from either a http request or json file into a json object
      * @param reader http request from github or a json file
@@ -70,7 +72,7 @@ public class Main extends AbstractHandler {
         try {
             String currentDir = System.getProperty("user.dir");
             System.out.println("Current working directory: " + currentDir);
-            Process cloning = Runtime.getRuntime().exec("git clone -b issue7 " + repo + " ./" + REPO_FOLDER);
+            Process cloning = Runtime.getRuntime().exec("git clone -b assessment " + repo + " ./" + REPO_FOLDER);
             
             // Wait for the process to finish
             int exitValue = cloning.waitFor();
@@ -118,7 +120,9 @@ public class Main extends AbstractHandler {
             int error = cloneRepo(repo); 
             if(error == ERRNONE){
                 System.out.println("cloned without any issues"); 
-                // 2nd compile the code
+
+                //compile and test cloned project
+                String TestAndCompileResult = compileTest.compileAndTest(); 
 
             }  
         
