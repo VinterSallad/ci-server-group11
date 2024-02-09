@@ -101,4 +101,17 @@ public class ContinuousIntegrationServerTest {
         assertEquals(ERROR, cloning_result);
     }
 
+    @Test
+    public void dummy(){
+        assertTrue(false); //change to false to see what happens when not all test pass
+    }
+
+    @Test
+    public void testCompileAndTest(){
+        String URL = "https://github.com/VinterSallad/ci-server-group11";
+        main.cloneRepo(URL); 
+        String out = CompileTest.compileAndTest(); 
+        assertEquals("", out); 
+    }
+
 }
