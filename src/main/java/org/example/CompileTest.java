@@ -8,9 +8,15 @@ import java.io.InputStreamReader;
 
 public class CompileTest {
 
+    public static final String PASSED = "Compilation and test passed"; 
+    public static final String TFAILED = "Tests failed"; 
+    public static final String CFAILED = "Compilation failed"; 
+    public static final String OTHER = "Could not find repo"; 
 
-   public static String compileAndTest() {
+
+    public String compileAndTest() {
         File project_folder = new File(Main.REPO_FOLDER);
+        String result = OTHER; 
 
         if(project_folder.exists() && project_folder.isDirectory()){
             try {
@@ -22,25 +28,32 @@ public class CompileTest {
                 //start process 
                 Process building = futureBuild.start(); 
                 //get the exit value to see if the build and test were successful 
-                int exitValue = building.waitFor();
-                System.out.println(exitValue); 
-                InputStream fis = building.getInputStream();
-                InputStreamReader isr = new InputStreamReader(fis);
-                BufferedReader fg = new BufferedReader(isr);
+                building.waitFor();
+                BufferedReader output =  new BufferedReader(new InputStreamReader(building.getInputStream()));
                 String line = null;
-                while ((line = fg.readLine()) != null) {
+                Boolean done = false; 
+                result = PASSED; 
+                while ((line = output.readLine()) != null ) {
                     System.out.println(line);
+                    if(line.contains("COMPILATION ERROR" ) && !done){
+                        result = CFAILED; 
+                        done = true; 
+                    }else if(line.contains("BUILD FAILURE") && !done){
+                        done = true; 
+                        result = TFAILED; 
+                    }    
                 }
-                Process remove = Runtime.getRuntime().exec("rm -rf " + Main.REPO_FOLDER); //delete repo
-                System.out.println(exitValue); 
+                //delete repo
+                Process remove = Runtime.getRuntime().exec("rm -rf " + Main.REPO_FOLDER); 
     
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 System.out.print("Could not build.");
+
             }
 
         }
-        return "";
+        return result;
     }
 
 
