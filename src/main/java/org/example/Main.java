@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.util.Objects;
 
@@ -16,8 +17,8 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.*;
 
 public class Main extends AbstractHandler {
-    public static final int ERROR = 0;
-    public static final int ERRNONE = 1; 
+    public static final int ERROR = -1;
+    public static final int ERRNONE = 0; 
 
     /**
      * converts the bufferedreader optimally that comes from either a http request or json file into a json object
@@ -66,9 +67,15 @@ public class Main extends AbstractHandler {
     public static int cloneRepo(String repo){
         System.out.println("Cloning repository "+ repo);
         try {
-            Process cloning = Runtime.getRuntime().exec("git clone -b " + repo + " ./repo");
-            cloning.waitFor();
-            return ERRNONE;
+            String currentDir = System.getProperty("user.dir");
+            System.out.println("Current working directory: " + currentDir);
+            Process cloning = Runtime.getRuntime().exec("git clone " + repo + " ./repo");
+            
+            // Wait for the process to finish
+            int exitValue = cloning.waitFor();
+            
+            // Check the exit value to determine if the command was successful
+            return (exitValue == ERRNONE) ? ERRNONE : ERROR ; 
         } catch (Throwable t) {
             System.err.println("An unexpected error occurred during cloning : " + t.getMessage());
             return  ERROR;
