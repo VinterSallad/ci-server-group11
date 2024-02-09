@@ -70,7 +70,7 @@ public class Main extends AbstractHandler {
         try {
             String currentDir = System.getProperty("user.dir");
             System.out.println("Current working directory: " + currentDir);
-            Process cloning = Runtime.getRuntime().exec("git clone " + repo + " ./" + REPO_FOLDER);
+            Process cloning = Runtime.getRuntime().exec("git clone -b issue7 " + repo + " ./" + REPO_FOLDER);
             
             // Wait for the process to finish
             int exitValue = cloning.waitFor();

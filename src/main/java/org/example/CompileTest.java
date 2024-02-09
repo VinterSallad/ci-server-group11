@@ -23,6 +23,7 @@ public class CompileTest {
                 Process building = futureBuild.start(); 
                 //get the exit value to see if the build and test were successful 
                 int exitValue = building.waitFor();
+                System.out.println(exitValue); 
                 InputStream fis = building.getInputStream();
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader fg = new BufferedReader(isr);
