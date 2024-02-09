@@ -16,6 +16,8 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.*;
 
 public class Main extends AbstractHandler {
+    public static final int ERROR = 0;
+    public static final int ERRNONE = 1; 
 
     /**
      * converts the bufferedreader optimally that comes from either a http request or json file into a json object
@@ -54,6 +56,25 @@ public class Main extends AbstractHandler {
         return jsonRequest.getString("ref");
     }
 
+
+    /**
+     * Clones a Git repository into a local directory.
+     * 
+     * @param repo the URL of the Git repository to clone
+     * @return ERRNONE if the repository is cloned successfully, ERROR otherwise
+     */
+    public static int cloneRepo(String repo){
+        System.out.println("Cloning repository "+ repo);
+        try {
+            Process cloning = Runtime.getRuntime().exec("git clone -b " + repo + " ./repo");
+            cloning.waitFor();
+            return ERRNONE;
+        } catch (Throwable t) {
+            System.err.println("An unexpected error occurred during cloning : " + t.getMessage());
+            return  ERROR;
+        }
+    }
+
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
@@ -83,15 +104,21 @@ public class Main extends AbstractHandler {
 
             System.out.println(repo);
             System.out.println(ref);
+
+            // here you do all the continuous integration tasks
+            // for example
+            int error = cloneRepo(repo); 
+            if(error == ERRNONE){
+                System.out.println("cloned without any issues"); 
+            }
+            // 2nd compile the code
+        
         }
 
 
         System.out.println(target);
 
-        // here you do all the continuous integration tasks
-        // for example
-        // 1st clone your repository
-        // 2nd compile the code
+        
 
         response.getWriter().println("CI job done");
 
