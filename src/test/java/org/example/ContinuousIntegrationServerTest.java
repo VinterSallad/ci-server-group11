@@ -113,7 +113,7 @@ public class ContinuousIntegrationServerTest {
     @Test
     public void dummy() {
         // change this dummy test to assertTrue(false); 
-        //and the testCompileAndTest in the main branch to 
+        // and the testCompileAndTest in the main branch to 
         // assertEquals(CompileTest.TFAILED, out)
         // Change this dummy  test to a none compiling one and the 
         // testCompileAndTest in the main branch to 
