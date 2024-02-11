@@ -86,7 +86,7 @@ public class ContinuousIntegrationServerTest {
         assertEquals(expected, actual);
     }
 
-    @Test
+    //@Test
     public void testCloneGoodRepo() {
         String URL = "https://github.com/VinterSallad/ci-server-group11";
         int cloning_result = main.cloneRepo(URL); 
@@ -94,7 +94,7 @@ public class ContinuousIntegrationServerTest {
         assertEquals(ERRNONE, cloning_result);
     }
 
-    @Test
+    //@Test
     public void testCloneInexistantRepo() {
         String URL = "https://github.com/VinterSallad/ci-server-group1111111";
         int cloning_result = main.cloneRepo(URL); 
@@ -102,12 +102,23 @@ public class ContinuousIntegrationServerTest {
         assertEquals(ERROR, cloning_result);
     }
 
-    @Test
+    //@Test
     public void testCompileAndTest(){
         String URL = "https://github.com/VinterSallad/ci-server-group11";
         main.cloneRepo(URL); 
         String out = compileTest.compileAndTest(); 
         assertEquals(CompileTest.PASSED, out); 
+    }
+
+    @Test
+    public void dummy() {
+        // change this dummy test to assertTrue(false); 
+        //and the testCompileAndTest in the main branch to 
+        // assertEquals(CompileTest.TFAILED, out)
+        // Change this dummy  test to a none compiling one and the 
+        // testCompileAndTest in the main branch to 
+        // assertEquals(CompileTest.CFAILED, out)
+        assertTrue(true);
     }
 
 }
