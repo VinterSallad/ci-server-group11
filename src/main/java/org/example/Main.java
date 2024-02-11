@@ -60,6 +60,17 @@ public class Main extends AbstractHandler {
         return jsonRequest.getString("ref");
     }
 
+    /**
+     * takes a json object and returns the "statuses_url" object to be used to send the status of the build
+     * @param jsonRequest the jsonObject to extract info from
+     * @return the statuses_url info
+     */
+    public String getGitHubStatusUrl(JSONObject jsonRequest) {
+        String statusUrl = jsonRequest.getJSONObject("repository").getString("statuses_url");
+        return statusUrl.replace("{sha}", jsonRequest.getString("after"));
+    }
+
+
 
     /**
      * Clones a Git repository into a local directory.
@@ -123,6 +134,19 @@ public class Main extends AbstractHandler {
 
                 //compile and test cloned project
                 String TestAndCompileResult = compileTest.compileAndTest(); 
+
+                //notify the status of the build
+                Notification notification = new Notification();
+                
+                String token = "tokenValue"; //WE NEED TO ADD A REAL ONE
+
+                String statusUrl = getGitHubStatusUrl(payload);
+
+                if (TestAndCompileResult.equals(CompileTest.PASSED)) {
+                    notification.notifyStatus("success" ,TestAndCompileResult , token, statusUrl);
+                } else {
+                    notification.notifyStatus("failure" ,TestAndCompileResult , token, statusUrl);
+                }
 
             }  
         
