@@ -48,6 +48,14 @@ public class History {
         Files.writeString(file.toPath(), content);
         return 0;
     }
+    public static int clearBuildHistory() throws IOException {
+        File file = new File("buildHistory.txt");
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        Files.writeString(file.toPath(), "");
+        return 0;
+    }
 
 
      
