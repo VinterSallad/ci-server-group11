@@ -72,7 +72,7 @@ public class ContinuousIntegrationServerTest {
 
     @Test
     public void testGetGitHubRepoRef() {
-        String expected = "refs/heads/mains";
+        String expected = "refs/heads/main";
         String actual = main.getGitHubRepoRef(gitPushPayload);
 
         assertEquals(expected, actual);
