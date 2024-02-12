@@ -138,7 +138,7 @@ public class Main extends AbstractHandler {
                 //notify the status of the build
                 Notification notification = new Notification();
                 
-                String token = "tokenValue"; //WE NEED TO ADD A REAL ONE
+                String token = "Z2hwX2cxZ0xDY0owcUs0b0JNUTJZRzEyZ1JCRFBKdFN5QjNvMHhYYg==";
 
                 String statusUrl = getGitHubStatusUrl(payload);
 

@@ -6,8 +6,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import java.util.Base64;
 
 public class Notification {
+
+    private CloseableHttpClient httpClient = null;
+
+    // Setter method for httpClient
+    public void setHttpClient(CloseableHttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 
     /**
      * Notifies the status of the compilation and testing process to the GitHub API.
@@ -20,11 +28,14 @@ public class Notification {
      */
     public String notifyStatus (String state, String description, String token, String url) 
     {
+        byte[] decodedBytes = Base64.getDecoder().decode(token);
+        String decodedString = new String(decodedBytes);
         try {
-            CloseableHttpClient client = HttpClients.createDefault(); 
+            if(httpClient == null)
+                httpClient = HttpClients.createDefault(); 
             HttpPost httpPost = new HttpPost(url);
             httpPost.setHeader("Accept", "application/vnd.github.v3+json");
-            httpPost.setHeader("Authorization", "Bearer " + token);
+            httpPost.setHeader("Authorization", "Bearer " + decodedString);
             httpPost.setHeader("X-GitHub-API-Version", "2022-11-28");
             StringEntity entity = new StringEntity("{\n" +
                     "  \"state\": \"" + state + "\",\n" +
@@ -32,9 +43,9 @@ public class Notification {
                     "  \"context\": \"CI-Server\"\n}");
 
             httpPost.setEntity(entity);
-            CloseableHttpResponse response = client.execute(httpPost);
+            CloseableHttpResponse response = httpClient.execute(httpPost);
             int responseCode = response.getStatusLine().getStatusCode();
-            client.close();
+            httpClient.close();
             response.close();
             if (responseCode != 201) {
                 return "Failure with response code: " + responseCode;
