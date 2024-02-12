@@ -123,32 +123,33 @@ public class Main extends AbstractHandler {
 
                 //compile and test cloned project
                 String TestAndCompileResult = compileTest.compileAndTest(); 
+                String date="";
+                String SHA="";
+                String log="";
+                //TODO extract the information from the payload
+                History.updateBuildHistory(date,SHA,log);
+                History.getBuildHistoryHTML();
+                System.out.println("History updated");
 
             }
-            String date="";
-            String SHA="";
-            String log="";
-            //TODO extract the information from the payload
-            History.updateBuildHistory(date,SHA,log);
-            History.getBuildHistoryHTML();
-            System.out.println("History updated");
             
+
 
             
 
         
         }
+
+        
+
+
+        System.out.println(target);
 
         if(target.equals("/history") ){
 
             System.out.println("Accessing build history log");
 
         }
-
-
-        System.out.println(target);
-
-        
 
         response.getWriter().println("CI job done");
 
