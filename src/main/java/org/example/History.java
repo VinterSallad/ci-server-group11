@@ -12,8 +12,14 @@ public class History {
 
     
     
-    
-    //Property (CI feature): the CI server keeps the history of the past builds. This history persists even if the server is rebooted. Each build is given a unique URL, that is accessible to get the build information (commit identifier, build date, build logs). One URL exists to list all builds.
+    /**
+     * Updates the build history with the date, sha, and log of the build
+     * @param date the date of the build
+     * @param sha the sha of the build
+     * @param log the log of the build
+     * @return 0 if successful
+     * @throws IOException
+     */
     public static int updateBuildHistory(String date, String sha, String log) throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
@@ -24,6 +30,12 @@ public class History {
         Files.writeString(file.toPath(), content);
         return 0;
     }
+
+    /**
+     * Returns the build history
+     * @return the build history in a string
+     * @throws IOException
+     */
     public static String getBuildHistory() throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
@@ -31,6 +43,12 @@ public class History {
         }
         return Files.readString(file.toPath());
     }
+
+    /**
+     * Creates an HTML file with the build history
+     * @return 0 if successful
+     * @throws IOException
+     */
     public static int getBuildHistoryHTML() throws IOException {
         File file = new File("buildHistory.html");
         if (!file.exists()) {
@@ -48,6 +66,12 @@ public class History {
         Files.writeString(file.toPath(), content);
         return 0;
     }
+
+    /**
+     * Clears the build history
+     * @return 0 if successful
+     * @throws IOException
+     */
     public static int clearBuildHistory() throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
