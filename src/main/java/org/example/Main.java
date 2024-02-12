@@ -60,6 +60,17 @@ public class Main extends AbstractHandler {
         return jsonRequest.getString("ref");
     }
 
+    /**
+     * takes a json object and returns the "statuses_url" object to be used to send the status of the build
+     * @param jsonRequest the jsonObject to extract info from
+     * @return the statuses_url info
+     */
+    public String getGitHubStatusUrl(JSONObject jsonRequest) {
+        String statusUrl = jsonRequest.getJSONObject("repository").getString("statuses_url");
+        return statusUrl.replace("{sha}", jsonRequest.getString("after"));
+    }
+
+
 
     /**
      * Clones a Git repository into a local directory.
@@ -137,19 +148,30 @@ public class Main extends AbstractHandler {
 
             
 
-        
-        }
+
+                //notify the status of the build
+                Notification notification = new Notification();
+                
+                String token = "Z2hwX2cxZ0xDY0owcUs0b0JNUTJZRzEyZ1JCRFBKdFN5QjNvMHhYYg==";
+
+                String statusUrl = getGitHubStatusUrl(payload);
+
+                if (TestAndCompileResult.equals(CompileTest.PASSED)) {
+                    notification.notifyStatus("success" ,TestAndCompileResult , token, statusUrl);
+                } else {
+                    notification.notifyStatus("failure" ,TestAndCompileResult , token, statusUrl);
+                }
+
 
         
-
-
-        System.out.println(target);
-
         if(target.equals("/history") ){
 
             System.out.println("Accessing build history log");
 
         }
+        System.out.println(target);
+
+        
 
         response.getWriter().println("CI job done");
 

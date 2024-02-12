@@ -16,6 +16,17 @@ import java.nio.Buffer;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import org.mockito.ArgumentCaptor;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 public class ContinuousIntegrationServerTest {
@@ -110,6 +121,7 @@ public class ContinuousIntegrationServerTest {
         assertEquals(CompileTest.PASSED, out); 
     }
 
+
     @Test 
     public void testUpdateBuildHistory() throws IOException {
         String date = "2021-10-10";
@@ -129,6 +141,52 @@ public class ContinuousIntegrationServerTest {
         String result = History.getBuildHistory();
         String expected = date + " " + sha + " " + log + "\n";
         assertEquals(expected, result);
+    }
+    @Test
+    public void testNotifyStatus() throws Exception {
+        // Mocking parameters
+        String state = "success";
+        String description = "Compilation and tests passed";
+        String token = "dummyToken";
+        String encodedToken = "ZHVtbXlUb2tlbg==";
+        String url = "dummyUrl";
+
+        // Mocking HTTP client and response
+        CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
+        CloseableHttpResponse httpResponse = mock(CloseableHttpResponse.class);
+
+        // Mocking HTTP status line and entity
+        StatusLine statusLine = mock(StatusLine.class);
+        HttpEntity httpEntity = mock(HttpEntity.class);
+
+        // Mocking response code
+        when(statusLine.getStatusCode()).thenReturn(201);
+
+        // Mocking HTTP client execution
+        when(httpClient.execute(any())).thenReturn(httpResponse);
+        when(httpResponse.getStatusLine()).thenReturn(statusLine);
+        when(httpResponse.getEntity()).thenReturn(httpEntity);
+        when(httpEntity.getContent()).thenReturn(null);
+
+        // Creating Notification instance with mocked HTTP client
+        Notification notification = new Notification();
+        notification.setHttpClient(httpClient);
+
+        // Invoking the method under test
+        String result = notification.notifyStatus(state, description, encodedToken, url);
+
+        // Verifying the method was called with correct parameters
+        ArgumentCaptor<HttpPost> argument = ArgumentCaptor.forClass(HttpPost.class);
+        verify(httpClient).execute(argument.capture());
+        HttpPost capturedHttpPost = argument.getValue();
+
+        assertEquals("Bearer dummyToken", capturedHttpPost.getFirstHeader("Authorization").getValue());
+        assertEquals("2022-11-28", capturedHttpPost.getFirstHeader("X-GitHub-API-Version").getValue());
+        assertNotNull(capturedHttpPost.getEntity());
+
+        // Verifying the result
+        assertEquals("Success", result);
+
     }
 
 }
