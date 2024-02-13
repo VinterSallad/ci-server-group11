@@ -146,6 +146,5 @@ public class Main extends AbstractHandler {
         server.setHandler(new Main());
         server.start();
         server.join();
-        aaaa
     }
 }
