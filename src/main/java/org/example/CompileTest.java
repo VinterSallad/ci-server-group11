@@ -46,8 +46,10 @@ public class CompileTest {
                     sb.append(line);
                     if(line.contains("COMPILATION ERROR" ) && !done){
                         result[0] = CFAILED;
+                        done = true; 
                     }else if(line.contains("BUILD FAILURE") && !done){
                         result[0] = TFAILED;
+                        done = true; 
                     }else if(line.contains("Finished at:")) {
                         result[1] = line.split(": ")[1];
                     }
