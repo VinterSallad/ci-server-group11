@@ -98,12 +98,12 @@ public class Main extends AbstractHandler {
      * @param repo the URL of the Git repository to clone
      * @return ERRNONE if the repository is cloned successfully, ERROR otherwise
      */
-    public int cloneRepo(String repo){
+    public int cloneRepo(String repo, String ref){
         System.out.println("Cloning repository "+ repo);
         try {
             String currentDir = System.getProperty("user.dir");
             System.out.println("Current working directory: " + currentDir);
-            Process cloning = Runtime.getRuntime().exec("git clone -b assessment " + repo + " ./" + REPO_FOLDER);
+            Process cloning = Runtime.getRuntime().exec("git clone -b " + ref + " " + repo + " ./" + REPO_FOLDER);
             
             // Wait for the process to finish
             int exitValue = cloning.waitFor();
@@ -147,7 +147,7 @@ public class Main extends AbstractHandler {
 
             // here you do all the continuous integration tasks
             // for example
-            int error = cloneRepo(repo);
+            int error = cloneRepo(repo, ref);
             if (error == ERRNONE) {
                 System.out.println("cloned without any issues");
 

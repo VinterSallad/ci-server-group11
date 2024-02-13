@@ -100,7 +100,8 @@ public class ContinuousIntegrationServerTest {
     @Test
     public void testCloneGoodRepo() {
         String URL = "https://github.com/VinterSallad/ci-server-group11";
-        int cloning_result = main.cloneRepo(URL); 
+        String ref = "assessment";
+        int cloning_result = main.cloneRepo(URL, ref);
 
         assertEquals(ERRNONE, cloning_result);
     }
@@ -108,7 +109,8 @@ public class ContinuousIntegrationServerTest {
     @Test
     public void testCloneInexistantRepo() {
         String URL = "https://github.com/VinterSallad/ci-server-group1111111";
-        int cloning_result = main.cloneRepo(URL); 
+        String ref = "assessment";
+        int cloning_result = main.cloneRepo(URL, ref);
 
         assertEquals(ERROR, cloning_result);
     }
@@ -116,7 +118,8 @@ public class ContinuousIntegrationServerTest {
     @Test
     public void testCompileAndTest(){
         String URL = "https://github.com/VinterSallad/ci-server-group11";
-        main.cloneRepo(URL); 
+        String ref = "assessment";
+        main.cloneRepo(URL, ref);
         String out = compileTest.compileAndTest(); 
         assertEquals(CompileTest.PASSED, out); 
     }
