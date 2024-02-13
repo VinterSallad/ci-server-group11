@@ -95,12 +95,12 @@ public class ContinuousIntegrationServerTest {
     }
 
     //@Test
-    public void testCloneInexistantRepo() {
-        String URL = "https://github.com/VinterSallad/ci-server-group1111111";
-        int cloning_result = main.cloneRepo(URL); 
+    //public void testCloneInexistantRepo() {
+    //    String URL = "https://github.com/VinterSallad/ci-server-group1111111";
+    //    int cloning_result = main.cloneRepo(URL); 
 
-        assertEquals(ERROR, cloning_result);
-    }
+    //    assertEquals(ERROR, cloning_result);
+    //}
 
     //@Test
     public void testCompileAndTest(){
