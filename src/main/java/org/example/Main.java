@@ -160,7 +160,13 @@ public class Main extends AbstractHandler {
 
                 //Extract the mvn build date from above string
                 String[] info = log.split("\\n");
-                String date = info[info.length-2].split(": ")[1];
+                String date = "";
+                //Ugly and unsafe solution, better to incorporate this process into compileAndTest
+                try {
+                    date = info[info.length-2].split(": ")[1];
+                } catch (IndexOutOfBoundsException e) {
+                    date = info[info.length-13].split(": ")[1];
+                }
 
                 //Extract the commit identifier
                 String SHA = payload.getString("after");

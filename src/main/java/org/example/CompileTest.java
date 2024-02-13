@@ -1,10 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class CompileTest {
 
@@ -40,7 +36,7 @@ public class CompileTest {
                 Process building = futureBuild.start(); 
                 //get the exit value to see if the build and test were successful 
                 building.waitFor();
-                BufferedReader output =  new BufferedReader(new InputStreamReader(building.getInputStream()));
+                BufferedReader output =  new BufferedReader(new FileReader("../mvn.log"));
                 String line = null;
                 Boolean done = false; 
                 result = PASSED; 
