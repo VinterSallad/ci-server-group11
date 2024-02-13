@@ -61,8 +61,23 @@ public class History {
         //put a array header (date, sha, log)
         content += "<p>Format : Date SHA Log</p>\n";
         for (String build : builds) {
-            String[] buildInfo = build.split(" ");
-            content += "<p>" + buildInfo[0] + " " + buildInfo[1]+ " " + buildInfo[2] + "</p>\n";
+            //only split between date, sha, and log but the log can contains " "
+            String[] buildInfo = build.split(" ", 3);
+            //put a link to the log when you click on the SHA OR the date
+            content += "<p><a href=\"log/" + buildInfo[1] + ".txt\">" + buildInfo[0] + " " + buildInfo[1] + "</a> " +"</p>\n";
+
+            //create a log file for each build
+            //creat a log folder if it doesn't exist
+            File logFolder = new File("log");
+            if (!logFolder.exists()) {
+                logFolder.mkdir();
+            }
+            File logFile = new File("log/" + buildInfo[1] + ".txt");
+            if (!logFile.exists()) {
+                logFile.createNewFile();
+            }
+            Files.writeString(logFile.toPath(), buildInfo[2]);
+
         }
         content += "</body>\n</html>";
         Files.writeString(file.toPath(), content);
