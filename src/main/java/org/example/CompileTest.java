@@ -21,13 +21,13 @@ public class CompileTest {
      *         - "TFAILED" if there were test failures in the project.
      *         - "OTHER" if there was an unexpected error during the process.
      */
-    public String compileAndTest() {
+    public String[] compileAndTest() {
         File project_folder = new File(Main.REPO_FOLDER);
-        String result = OTHER; 
+        String[] result = new String[3]; //result, log, date
 
         if(project_folder.exists() && project_folder.isDirectory()){
             try {
-                ProcessBuilder futureBuild = new ProcessBuilder("mvn", "package", "--log-file", "../mvn.log"); //CHANGED
+                ProcessBuilder futureBuild = new ProcessBuilder("mvn", "package"); //CHANGED
                 futureBuild.redirectErrorStream(true);
                 //set location of process 
                 System.out.println(project_folder.getAbsolutePath());
@@ -36,23 +36,27 @@ public class CompileTest {
                 Process building = futureBuild.start(); 
                 //get the exit value to see if the build and test were successful 
                 building.waitFor();
-                BufferedReader output =  new BufferedReader(new FileReader("../mvn.log"));
+                BufferedReader output =  new BufferedReader(new InputStreamReader(building.getInputStream()));
                 String line = null;
+                StringBuilder sb = new StringBuilder();
                 Boolean done = false; 
-                result = PASSED; 
+                result[0] = PASSED;
                 while ((line = output.readLine()) != null ) {
                     System.out.println(line);
+                    sb.append(line);
                     if(line.contains("COMPILATION ERROR" ) && !done){
-                        result = CFAILED; 
-                        done = true; 
+                        result[0] = CFAILED;
                     }else if(line.contains("BUILD FAILURE") && !done){
-                        done = true; 
-                        result = TFAILED; 
-                    }    
+                        result[0] = TFAILED;
+                    }else if(line.contains("Finished at:")) {
+                        result[1] = line.split(": ")[1];
+                    }
                 }
                 //delete repo
                 Process remove = Runtime.getRuntime().exec("rm -rf " + Main.REPO_FOLDER); 
-    
+
+                result[2] = sb.toString();
+
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 System.out.print("Could not build.");

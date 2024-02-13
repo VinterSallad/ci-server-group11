@@ -152,27 +152,30 @@ public class Main extends AbstractHandler {
                 System.out.println("cloned without any issues");
 
                 //compile and test cloned project
-                String TestAndCompileResult = compileTest.compileAndTest();
-                String filePath = "./mvn.log";
+                String[] TestAndCompileResult = compileTest.compileAndTest();
+
+                //String filePath = "./mvn.log";
 
                 //Get the mvn log into a string
-                String log = readFile(filePath);
+                //String log = readFile(filePath);
 
                 //Extract the mvn build date from above string
-                String[] info = log.split("\\n");
-                String date = "";
+                //String[] info = log.split("\\n");
+                //String date = "";
                 //Ugly and unsafe solution, better to incorporate this process into compileAndTest
-                try {
-                    date = info[info.length-2].split(": ")[1];
-                } catch (IndexOutOfBoundsException e) {
-                    date = info[info.length-13].split(": ")[1];
-                }
+                //try {
+                //    date = info[info.length-2].split(": ")[1];
+                //} catch (IndexOutOfBoundsException e) {
+                //    date = info[info.length-13].split(": ")[1];
+                //}
 
                 //Extract the commit identifier
                 String SHA = payload.getString("after");
+                String log = TestAndCompileResult[2];
+                String date = TestAndCompileResult[1];
 
                 //Remove linebreaks in log to be compatible with below functions
-                log = log.replaceAll("\\n", "");
+                //log = log.replaceAll("\\n", "");
 
                 History.updateBuildHistory(date, SHA, log);
                 History.getBuildHistoryHTML();
@@ -182,14 +185,14 @@ public class Main extends AbstractHandler {
                 //notify the status of the build
                 Notification notification = new Notification();
 
-                String token = "Z2hwX2cxZ0xDY0owcUs0b0JNUTJZRzEyZ1JCRFBKdFN5QjNvMHhYYg==";
+                String token = "Z2hwX3hSQm9KSU5DcUJybXhoV1A5QnFhbGZxRnhBT0pySTFjZ0xZNQ==";
 
                 String statusUrl = getGitHubStatusUrl(payload);
 
-                if (TestAndCompileResult.equals(CompileTest.PASSED)) {
-                    notification.notifyStatus("success", TestAndCompileResult, token, statusUrl);
+                if (TestAndCompileResult[0].equals(CompileTest.PASSED)) {
+                    notification.notifyStatus("success", TestAndCompileResult[0], token, statusUrl);
                 } else {
-                    notification.notifyStatus("failure", TestAndCompileResult, token, statusUrl);
+                    notification.notifyStatus("failure", TestAndCompileResult[0], token, statusUrl);
                 }
 
             }

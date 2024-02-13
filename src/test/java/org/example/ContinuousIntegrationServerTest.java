@@ -120,8 +120,8 @@ public class ContinuousIntegrationServerTest {
         String URL = "https://github.com/VinterSallad/ci-server-group11";
         String ref = "assessment";
         main.cloneRepo(URL, ref);
-        String out = compileTest.compileAndTest(); 
-        assertEquals(CompileTest.PASSED, out); 
+        String[] out = compileTest.compileAndTest();
+        assertEquals(CompileTest.PASSED, out[0]);
     }
 
 
