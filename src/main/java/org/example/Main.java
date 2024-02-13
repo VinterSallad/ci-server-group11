@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
@@ -57,7 +58,37 @@ public class Main extends AbstractHandler {
      * @return the ref info
      */
     public String getGitHubRepoRef(JSONObject jsonRequest) {
-        return jsonRequest.getString("ref");
+        String[] split = jsonRequest.getString("ref").split("/");
+        return split[split.length-1];
+    }
+
+    /**
+     * takes a json object and returns the "statuses_url" object to be used to send the status of the build
+     * @param jsonRequest the jsonObject to extract info from
+     * @return the statuses_url info
+     */
+    public String getGitHubStatusUrl(JSONObject jsonRequest) {
+        String statusUrl = jsonRequest.getJSONObject("repository").getString("statuses_url");
+        return statusUrl.replace("{sha}", jsonRequest.getString("after"));
+    }
+
+
+    //converts file content into a string object
+    private String readFile(String filePath) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line;
+
+            while((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            br.close();
+
+            return sb.toString();
+        } catch (Exception e) {
+            return "Could not read from the file";
+        }
     }
 
 
@@ -67,12 +98,12 @@ public class Main extends AbstractHandler {
      * @param repo the URL of the Git repository to clone
      * @return ERRNONE if the repository is cloned successfully, ERROR otherwise
      */
-    public int cloneRepo(String repo){
+    public int cloneRepo(String repo, String ref){
         System.out.println("Cloning repository "+ repo);
         try {
             String currentDir = System.getProperty("user.dir");
             System.out.println("Current working directory: " + currentDir);
-            Process cloning = Runtime.getRuntime().exec("git clone -b assessment " + repo + " ./" + REPO_FOLDER);
+            Process cloning = Runtime.getRuntime().exec("git clone -b " + ref + " " + repo + " ./" + REPO_FOLDER);
             
             // Wait for the process to finish
             int exitValue = cloning.waitFor();
@@ -103,7 +134,6 @@ public class Main extends AbstractHandler {
             System.out.println("GitHub successfully communicated with the server!");
         }
 
-        //TODO
         if(Objects.equals(githubEvent, "push")) {
             BufferedReader bufferedReader = request.getReader();
             JSONObject payload = readerToJSON(bufferedReader);
@@ -117,39 +147,66 @@ public class Main extends AbstractHandler {
 
             // here you do all the continuous integration tasks
             // for example
-            int error = cloneRepo(repo); 
-            if(error == ERRNONE){
-                System.out.println("cloned without any issues"); 
+            int error = cloneRepo(repo, ref);
+            if (error == ERRNONE) {
+                System.out.println("cloned without any issues");
 
                 //compile and test cloned project
-                String TestAndCompileResult = compileTest.compileAndTest(); 
-                String date="";
-                String SHA="";
-                String log="";
-                //TODO extract the information from the payload
-                History.updateBuildHistory(date,SHA,log);
+                String[] TestAndCompileResult = compileTest.compileAndTest();
+
+                //String filePath = "./mvn.log";
+
+                //Get the mvn log into a string
+                //String log = readFile(filePath);
+
+                //Extract the mvn build date from above string
+                //String[] info = log.split("\\n");
+                //String date = "";
+                //Ugly and unsafe solution, better to incorporate this process into compileAndTest
+                //try {
+                //    date = info[info.length-2].split(": ")[1];
+                //} catch (IndexOutOfBoundsException e) {
+                //    date = info[info.length-13].split(": ")[1];
+                //}
+
+                //Extract the commit identifier
+                String SHA = payload.getString("after");
+                String log = TestAndCompileResult[2];
+                String date = TestAndCompileResult[1];
+
+                //Remove linebreaks in log to be compatible with below functions
+                //log = log.replaceAll("\\n", "");
+
+                History.updateBuildHistory(date, SHA, log);
                 History.getBuildHistoryHTML();
                 System.out.println("History updated");
 
+
+                //notify the status of the build
+                Notification notification = new Notification();
+
+                String token = "Z2hwX3hSQm9KSU5DcUJybXhoV1A5QnFhbGZxRnhBT0pySTFjZ0xZNQ==";
+
+                String statusUrl = getGitHubStatusUrl(payload);
+
+                if (TestAndCompileResult[0].equals(CompileTest.PASSED)) {
+                    notification.notifyStatus("success", TestAndCompileResult[0], token, statusUrl);
+                } else {
+                    notification.notifyStatus("failure", TestAndCompileResult[0], token, statusUrl);
+                }
+
             }
-            
 
-
-            
-
-        
         }
-
         
-
-
-        System.out.println(target);
-
         if(target.equals("/history") ){
 
             System.out.println("Accessing build history log");
 
         }
+        System.out.println(target);
+
+        
 
         response.getWriter().println("CI job done");
 

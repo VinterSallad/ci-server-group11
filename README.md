@@ -1,6 +1,26 @@
 # ci-server-group11 DD2480 Assignment 2
 
-## How to Run Server (Preliminary)
+## How to Install and Run Server (Users)
+The server requires Apache Maven 3.9.6 and JDK17. You also need ngrok to allow for GitHub to communicate with the server. The CI server is only capable of working with Maven based projects.
+
+Package the server into a .jar file.
+```bash
+$ mvn package
+```
+
+Start ngrok on port 8011.
+```bash
+$ ngrok http 8011
+```
+
+Run the .jar folder in the target/ folder.
+```bash
+$ java -jar server-ci-group11-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
+
+Add the webhook to the GitHub repository that the server should work with. Whenever a push happens, the server should clone, mvn package and assign a status to the commit whether the command was successful or not.
+
+## How to Run Server (Legacy/Internal)
 The project uses Apache Maven 3.9.6 with JDK17.
 
 Package into a .jar with:

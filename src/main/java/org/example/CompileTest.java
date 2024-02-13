@@ -1,10 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class CompileTest {
 
@@ -25,9 +21,9 @@ public class CompileTest {
      *         - "TFAILED" if there were test failures in the project.
      *         - "OTHER" if there was an unexpected error during the process.
      */
-    public String compileAndTest() {
+    public String[] compileAndTest() {
         File project_folder = new File(Main.REPO_FOLDER);
-        String result = OTHER; 
+        String[] result = new String[3]; //result, log, date
 
         if(project_folder.exists() && project_folder.isDirectory()){
             try {
@@ -42,21 +38,27 @@ public class CompileTest {
                 building.waitFor();
                 BufferedReader output =  new BufferedReader(new InputStreamReader(building.getInputStream()));
                 String line = null;
+                StringBuilder sb = new StringBuilder();
                 Boolean done = false; 
-                result = PASSED; 
+                result[0] = PASSED;
                 while ((line = output.readLine()) != null ) {
                     System.out.println(line);
+                    sb.append(line);
                     if(line.contains("COMPILATION ERROR" ) && !done){
-                        result = CFAILED; 
+                        result[0] = CFAILED;
                         done = true; 
                     }else if(line.contains("BUILD FAILURE") && !done){
+                        result[0] = TFAILED;
                         done = true; 
-                        result = TFAILED; 
-                    }    
+                    }else if(line.contains("Finished at:")) {
+                        result[1] = line.split(": ")[1];
+                    }
                 }
                 //delete repo
                 Process remove = Runtime.getRuntime().exec("rm -rf " + Main.REPO_FOLDER); 
-    
+
+                result[2] = sb.toString();
+
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 System.out.print("Could not build.");
