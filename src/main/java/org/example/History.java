@@ -58,9 +58,11 @@ public class History {
         content += "<h1>Build History</h1>\n";
         String history = getBuildHistory();
         String[] builds = history.split("\n");  
+        //put a array header (date, sha, log)
+        content += "<p>Format : Date SHA Log</p>\n";
         for (String build : builds) {
             String[] buildInfo = build.split(" ");
-            content += "<a href=\"builds/" + buildInfo[1] + "\">" + buildInfo[0] + " " + buildInfo[1] + "</a><br>\n";
+            content += "<p>" + buildInfo[0] + " " + buildInfo[1]+ " " + buildInfo[2] + "</p>\n";
         }
         content += "</body>\n</html>";
         Files.writeString(file.toPath(), content);
