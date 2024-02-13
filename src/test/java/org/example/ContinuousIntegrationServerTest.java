@@ -123,12 +123,22 @@ public class ContinuousIntegrationServerTest {
     public void testGetBuildHistory() throws IOException {
         String date = "2021-10-10";
         String sha = "123456";
-        String log = "log";
+        String log = "some code";
         History.clearBuildHistory();
         History.updateBuildHistory(date, sha, log);
         String result = History.getBuildHistory();
         String expected = date + " " + sha + " " + log + "\n";
         assertEquals(expected, result);
+    }
+    @Test
+    public void testGetBuildHistoryHTML() throws IOException {
+        String date = "2021-10-10";
+        String sha = "123456";
+        String log = "some code";
+        History.clearBuildHistory();
+        History.updateBuildHistory(date, sha, log);
+        int result = History.getBuildHistoryHTML();
+        assertEquals(ERRNONE, result);
     }
 
 }
