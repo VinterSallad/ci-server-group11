@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
@@ -57,7 +58,8 @@ public class Main extends AbstractHandler {
      * @return the ref info
      */
     public String getGitHubRepoRef(JSONObject jsonRequest) {
-        return jsonRequest.getString("ref");
+        String[] split = jsonRequest.getString("ref").split("/");
+        return split[split.length-1];
     }
 
     /**
@@ -70,6 +72,24 @@ public class Main extends AbstractHandler {
         return statusUrl.replace("{sha}", jsonRequest.getString("after"));
     }
 
+
+    //converts file content into a string object
+    private String readFile(String filePath) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line;
+
+            while((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            br.close();
+
+            return sb.toString();
+        } catch (Exception e) {
+            return "Could not read from the file";
+        }
+    }
 
 
     /**
@@ -114,7 +134,6 @@ public class Main extends AbstractHandler {
             System.out.println("GitHub successfully communicated with the server!");
         }
 
-        //TODO
         if(Objects.equals(githubEvent, "push")) {
             BufferedReader bufferedReader = request.getReader();
             JSONObject payload = readerToJSON(bufferedReader);
@@ -128,41 +147,42 @@ public class Main extends AbstractHandler {
 
             // here you do all the continuous integration tasks
             // for example
-            int error = cloneRepo(repo); 
-            if(error == ERRNONE){
-                System.out.println("cloned without any issues"); 
+            int error = cloneRepo(repo);
+            if (error == ERRNONE) {
+                System.out.println("cloned without any issues");
 
                 //compile and test cloned project
-                String TestAndCompileResult = compileTest.compileAndTest(); 
-                String date="";
-                String SHA="";
-                String log="";
-                //TODO extract the information from the payload
-                History.updateBuildHistory(date,SHA,log);
+                String TestAndCompileResult = compileTest.compileAndTest();
+                String filePath = "./mvn.log";
+
+                String log = readFile(filePath);
+
+                String[] info = log.split("[INFO]");
+                String date = info[info.length-2];
+
+                String SHA = payload.getString("after");
+
+                History.updateBuildHistory(date, SHA, log);
                 History.getBuildHistoryHTML();
                 System.out.println("History updated");
-
-            }
-            
-
-
-            
 
 
                 //notify the status of the build
                 Notification notification = new Notification();
-                
+
                 String token = "Z2hwX2cxZ0xDY0owcUs0b0JNUTJZRzEyZ1JCRFBKdFN5QjNvMHhYYg==";
 
                 String statusUrl = getGitHubStatusUrl(payload);
 
                 if (TestAndCompileResult.equals(CompileTest.PASSED)) {
-                    notification.notifyStatus("success" ,TestAndCompileResult , token, statusUrl);
+                    notification.notifyStatus("success", TestAndCompileResult, token, statusUrl);
                 } else {
-                    notification.notifyStatus("failure" ,TestAndCompileResult , token, statusUrl);
+                    notification.notifyStatus("failure", TestAndCompileResult, token, statusUrl);
                 }
 
+            }
 
+        }
         
         if(target.equals("/history") ){
 

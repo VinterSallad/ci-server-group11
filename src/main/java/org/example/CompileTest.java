@@ -31,7 +31,7 @@ public class CompileTest {
 
         if(project_folder.exists() && project_folder.isDirectory()){
             try {
-                ProcessBuilder futureBuild = new ProcessBuilder("mvn", "package"); //CHANGED
+                ProcessBuilder futureBuild = new ProcessBuilder("mvn", "package", "--log-file", "../mvn.log"); //CHANGED
                 futureBuild.redirectErrorStream(true);
                 //set location of process 
                 System.out.println(project_folder.getAbsolutePath());
