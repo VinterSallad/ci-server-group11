@@ -129,7 +129,7 @@ public class ContinuousIntegrationServerTest {
     public void testUpdateBuildHistory() throws IOException {
         String date = "2021-10-10";
         String sha = "123456";
-        String log = "This is a log";
+        String log = "log";
         int result = History.updateBuildHistory(date, sha, log);
         assertEquals(ERRNONE, result);
     }
@@ -138,13 +138,25 @@ public class ContinuousIntegrationServerTest {
     public void testGetBuildHistory() throws IOException {
         String date = "2021-10-10";
         String sha = "123456";
-        String log = "This is a log";
+        String log = "some code";
         History.clearBuildHistory();
         History.updateBuildHistory(date, sha, log);
         String result = History.getBuildHistory();
         String expected = date + " " + sha + " " + log + "\n";
         assertEquals(expected, result);
     }
+  
+    @Test
+    public void testGetBuildHistoryHTML() throws IOException {
+        String date = "2021-10-10";
+        String sha = "123456";
+        String log = "some code";
+        History.clearBuildHistory();
+        History.updateBuildHistory(date, sha, log);
+        int result = History.getBuildHistoryHTML();
+        assertEquals(ERRNONE, result);
+    }
+  
     @Test
     public void testNotifyStatus() throws Exception {
         // Mocking parameters
@@ -189,6 +201,7 @@ public class ContinuousIntegrationServerTest {
 
         // Verifying the result
         assertEquals("Success", result);
+
 
     }
 
