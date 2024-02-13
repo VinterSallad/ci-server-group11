@@ -61,7 +61,7 @@ public class ContinuousIntegrationServerTest {
         JSONObject functionResult = main.readerToJSON(reader);
         JSONObject expectedResult = new JSONObject();
 
-        expectedResult.putOpt("ref", "refs/heads/mains");
+        expectedResult.putOpt("ref", "refs/heads/main");
 
         JSONObject repository = new JSONObject();
         repository.put("url", "https://github.com/VinterSallad/ci-server-group11");
