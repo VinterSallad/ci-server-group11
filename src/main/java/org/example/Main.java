@@ -155,12 +155,18 @@ public class Main extends AbstractHandler {
                 String TestAndCompileResult = compileTest.compileAndTest();
                 String filePath = "./mvn.log";
 
+                //Get the mvn log into a string
                 String log = readFile(filePath);
 
-                String[] info = log.split("[INFO]");
-                String date = info[info.length-2];
+                //Extract the mvn build date from above string
+                String[] info = log.split("\\n");
+                String date = info[info.length-2].split(": ")[1];
 
+                //Extract the commit identifier
                 String SHA = payload.getString("after");
+
+                //Remove linebreaks in log to be compatible with below functions
+                log = log.replaceAll("\\n", "");
 
                 History.updateBuildHistory(date, SHA, log);
                 History.getBuildHistoryHTML();

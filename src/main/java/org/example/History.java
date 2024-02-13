@@ -60,7 +60,7 @@ public class History {
         String[] builds = history.split("\n");  
         for (String build : builds) {
             String[] buildInfo = build.split(" ");
-            content += "<a href=\"builds/" + buildInfo[1] + "\">" + buildInfo[0] + " " + buildInfo[1] + "</a><br>\n";
+            content += "<a href=\"builds/" + buildInfo[0] + "\">" + buildInfo[1] + " " + buildInfo[2] + "</a><br>\n";
         }
         content += "</body>\n</html>";
         Files.writeString(file.toPath(), content);
