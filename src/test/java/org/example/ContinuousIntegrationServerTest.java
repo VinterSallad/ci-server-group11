@@ -114,7 +114,7 @@ public class ContinuousIntegrationServerTest {
     public void testUpdateBuildHistory() throws IOException {
         String date = "2021-10-10";
         String sha = "123456";
-        String log = "This is a log";
+        String log = "log";
         int result = History.updateBuildHistory(date, sha, log);
         assertEquals(ERRNONE, result);
     }
@@ -123,7 +123,7 @@ public class ContinuousIntegrationServerTest {
     public void testGetBuildHistory() throws IOException {
         String date = "2021-10-10";
         String sha = "123456";
-        String log = "This is a log";
+        String log = "log";
         History.clearBuildHistory();
         History.updateBuildHistory(date, sha, log);
         String result = History.getBuildHistory();
