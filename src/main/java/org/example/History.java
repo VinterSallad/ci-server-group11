@@ -74,7 +74,8 @@ public class History {
             if (!logFile.exists()) {
                 logFile.createNewFile();
             }
-            Files.writeString(logFile.toPath(), buildInfo[2]);
+            //add Date and sha to the log file
+            Files.writeString(logFile.toPath(), "Date : "+buildInfo[0] + " " +"SHA : " +buildInfo[1] + "\n"+buildInfo[2]);
 
         }
         content += "</body>\n</html>";
@@ -93,6 +94,15 @@ public class History {
             file.createNewFile();
         }
         Files.writeString(file.toPath(), "");
+        //delete the log folder
+        File logFolder = new File("log");
+        if (logFolder.exists()) {
+            File[] logs = logFolder.listFiles();
+            for (File log : logs) {
+                log.delete();
+            }
+            logFolder.delete();
+        }
         return 0;
     }
 
