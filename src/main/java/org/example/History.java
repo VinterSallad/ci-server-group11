@@ -20,7 +20,7 @@ public class History {
      * @return 0 if successful
      * @throws IOException
      */
-    public static int updateBuildHistory(String date, String sha, String log) throws IOException {
+    public int updateBuildHistory(String date, String sha, String log) throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
             file.createNewFile();
@@ -36,7 +36,7 @@ public class History {
      * @return the build history in a string
      * @throws IOException
      */
-    
+
     public String getBuildHistory() throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
