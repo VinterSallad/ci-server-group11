@@ -34,8 +34,9 @@ public class CompileTest {
                 futureBuild.directory(project_folder); 
                 //start process 
                 Process building = futureBuild.start(); 
-                //get the exit value to see if the build and test were successful 
+                //wait for building process to end
                 building.waitFor();
+                //create structures to get the console output
                 BufferedReader output =  new BufferedReader(new InputStreamReader(building.getInputStream()));
                 String line = null;
                 StringBuilder sb = new StringBuilder();
@@ -54,7 +55,7 @@ public class CompileTest {
                         result[1] = line.split(": ")[1];
                     }
                 }
-                //delete repo
+                //delete repository
                 Process remove = Runtime.getRuntime().exec("rm -rf " + Main.REPO_FOLDER); 
 
                 result[2] = sb.toString();
