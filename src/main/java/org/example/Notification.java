@@ -12,7 +12,12 @@ public class Notification {
 
     private CloseableHttpClient httpClient = null;
 
-    // Setter method for httpClient
+    /**
+     * Setter method for httpClient
+     * 
+     * @param httpClient the httpClient to set
+     * @return void
+    */
     public void setHttpClient(CloseableHttpClient httpClient) {
         this.httpClient = httpClient;
     }
