@@ -36,6 +36,7 @@ public class History {
      * @return the build history in a string
      * @throws IOException
      */
+    
     public String getBuildHistory() throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
