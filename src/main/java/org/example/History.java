@@ -36,7 +36,7 @@ public class History {
      * @return the build history in a string
      * @throws IOException
      */
-    public static String getBuildHistory() throws IOException {
+    public String getBuildHistory() throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
             file.createNewFile();
@@ -49,7 +49,7 @@ public class History {
      * @return 0 if successful
      * @throws IOException
      */
-    public static int getBuildHistoryHTML() throws IOException {
+    public int getBuildHistoryHTML() throws IOException {
         File file = new File("buildHistory.html");
         if (!file.exists()) {
             file.createNewFile();
@@ -88,7 +88,7 @@ public class History {
      * @return 0 if successful
      * @throws IOException
      */
-    public static int clearBuildHistory() throws IOException {
+    public int clearBuildHistory() throws IOException {
         File file = new File("buildHistory.txt");
         if (!file.exists()) {
             file.createNewFile();
