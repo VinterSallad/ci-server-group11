@@ -130,7 +130,8 @@ public class ContinuousIntegrationServerTest {
         String date = "2021-10-10";
         String sha = "123456";
         String log = "log";
-        int result = History.updateBuildHistory(date, sha, log);
+        History cHistory = new History();
+        int result = cHistory.updateBuildHistory(date, sha, log);
         assertEquals(ERRNONE, result);
     }
 
@@ -139,9 +140,10 @@ public class ContinuousIntegrationServerTest {
         String date = "2021-10-10";
         String sha = "123456";
         String log = "some code";
-        History.clearBuildHistory();
-        History.updateBuildHistory(date, sha, log);
-        String result = History.getBuildHistory();
+        History cHistory = new History();
+        cHistory.clearBuildHistory();
+        cHistory.updateBuildHistory(date, sha, log);
+        String result = cHistory.getBuildHistory();
         String expected = date + " " + sha + " " + log + "\n";
         assertEquals(expected, result);
     }
@@ -151,9 +153,10 @@ public class ContinuousIntegrationServerTest {
         String date = "2021-10-10";
         String sha = "123456";
         String log = "some code";
-        History.clearBuildHistory();
-        History.updateBuildHistory(date, sha, log);
-        int result = History.getBuildHistoryHTML();
+        History cHistory = new History();
+        cHistory.clearBuildHistory();
+        cHistory.updateBuildHistory(date, sha, log);
+        int result = cHistory.getBuildHistoryHTML();
         assertEquals(ERRNONE, result);
     }
   
