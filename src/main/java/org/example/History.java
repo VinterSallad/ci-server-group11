@@ -10,8 +10,6 @@ import org.json.JSONObject;
 
 public class History {
 
-    
-    
     /**
      * Updates the build history with the date, sha, and log of the build
      * @param date the date of the build
@@ -65,8 +63,8 @@ public class History {
 
             content += "<p><a href=\"log/" + buildInfo[1] + ".txt\">" + buildInfo[0] + " " + buildInfo[1] + "</a> " +"</p>\n";
 
-            //create a log file for each build
-            //create a log folder if it doesn't exist
+            // Create a log file for each build
+            // Create a log folder if it doesn't exist
             File logFolder = new File("log");
             if (!logFolder.exists()) {
                 logFolder.mkdir();
@@ -75,7 +73,7 @@ public class History {
             if (!logFile.exists()) {
                 logFile.createNewFile();
             }
-            //add Date and sha to the log file
+            // Add "Date" and "SHA" to the log file
             Files.writeString(logFile.toPath(), "Date : "+buildInfo[0] + " " +"SHA : " +buildInfo[1] + "\n"+buildInfo[2]);
 
         }
@@ -95,7 +93,8 @@ public class History {
             file.createNewFile();
         }
         Files.writeString(file.toPath(), "");
-        //delete the log folder
+
+        // Delete the log folder
         File logFolder = new File("log");
         if (logFolder.exists()) {
             File[] logs = logFolder.listFiles();
@@ -106,9 +105,6 @@ public class History {
         }
         return 0;
     }
-
-
-     
 }
 
     

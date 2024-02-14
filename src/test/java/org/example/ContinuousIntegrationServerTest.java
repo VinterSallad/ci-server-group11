@@ -33,7 +33,7 @@ public class ContinuousIntegrationServerTest {
     public static final int ERROR = -1;
     public static final int ERRNONE = 0; 
 
-    //This is all setup
+    // This is all setup
     Main main = new Main();
     CompileTest compileTest = new CompileTest(); 
     BufferedReader inputReaderPush;
@@ -47,10 +47,10 @@ public class ContinuousIntegrationServerTest {
         }
     }
 
-    //This is an actual payload that was sent for a push to the main branch
+    // This is an actual payload that was sent for a push to the main branch
     JSONObject gitPushPayload = null;
 
-    //This is a payload that is sent when GitHub pings the server
+    // This is a payload that is sent when GitHub pings the server
     JSONObject gitPingPayload = null;
 
     {
@@ -64,7 +64,7 @@ public class ContinuousIntegrationServerTest {
         }
     }
 
-    //Testing
+    // Testing
     @Test
     public void testReaderToJSON() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("src/test/java/org/example/smallExample.json"));
@@ -123,7 +123,6 @@ public class ContinuousIntegrationServerTest {
         String[] out = compileTest.compileAndTest();
         assertEquals(CompileTest.PASSED, out[0]);
     }
-
 
     @Test 
     public void testUpdateBuildHistory() throws IOException {
@@ -204,8 +203,5 @@ public class ContinuousIntegrationServerTest {
 
         // Verifying the result
         assertEquals("Success", result);
-
-
     }
-
 }
