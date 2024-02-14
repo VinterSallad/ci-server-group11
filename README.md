@@ -127,6 +127,8 @@ public String notifyStatus (String state, String description, String token, Stri
 
 `token` is first decoded from base64 to obtain the actual token string. It will initialize `httpClient` if it is not null using the `.createDefault()` method. Then an HTTP Post is created for the `URL` specified beforehand where headers include Accept, Authorization, and X-GitHub-API-Version. A JSON payload containing state, description, and context is created which is assigned to the `entity` of the request. The POST Request is then executed and we then retrieve the response status code and the method returns the appropriate String according to the status code we received.
 
+For testing purposes to verify the integrity of the method,the Mockito library is used to simulate HTTP client and requests which is written in the `testNotifyStatus()` method in the "ContinuousIntegrationServerTest.java" file. The HTTP response is then mocked to return a 201 Status Code to verify a successful response.
+
 ## Past Build History
 
 To check on the history of the past builds, ensure that the server is currently running, and then input "buildHistory.html" into the directory to bring you to a webpage containing the Data SHA Log of each past build. Clicking into each log will bring up the mvn log.
