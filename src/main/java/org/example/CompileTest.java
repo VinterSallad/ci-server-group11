@@ -14,17 +14,20 @@ public class CompileTest {
      * This method uses Maven to build the project and checks for compilation errors
      * and test failures. After compilation and testing, it deletes the repository folder.
      * 
-     * @return A string indicating the result of the compilation and testing process.
-     *         Possible return values are:
+     * @return An array of strings (result) indicating : 
+     *  1) the result of the compilation and testing process (result[0]).
+     *         Possible return values  for result[0] are:
      *         - "PASSED" if the project compiled and passed all tests successfully.
      *         - "CFAILED" if there were compilation errors in the project.
      *         - "TFAILED" if there were test failures in the project.
      *         - "OTHER" if there was an unexpected error during the process.
+     *  2) the log of the build (result[1])
+     *  3) the date of the build (result[2])
      */
     public String[] compileAndTest() {
         File project_folder = new File(Main.REPO_FOLDER);
         String[] result = new String[3]; //result, log, date
-        
+
         //default value for result[0] is OTHER 
         result[0] = OTHER; 
 
