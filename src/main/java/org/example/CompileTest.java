@@ -24,6 +24,9 @@ public class CompileTest {
     public String[] compileAndTest() {
         File project_folder = new File(Main.REPO_FOLDER);
         String[] result = new String[3]; //result, log, date
+        
+        //default value for result[0] is OTHER 
+        result[0] = OTHER; 
 
         if(project_folder.exists() && project_folder.isDirectory()){
             try {
