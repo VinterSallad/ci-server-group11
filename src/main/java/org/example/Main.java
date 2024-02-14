@@ -3,13 +3,13 @@ package org.example;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.util.Objects;
+
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;
@@ -176,9 +176,14 @@ public class Main extends AbstractHandler {
 
                 //Remove linebreaks in log to be compatible with below functions
                 //log = log.replaceAll("\\n", "");
+                
+                History history = new History();
+                history.updateBuildHistory(date, SHA, log);
+                history.getBuildHistoryHTML();
 
-                History.updateBuildHistory(date, SHA, log);
-                History.getBuildHistoryHTML();
+                //call updateBuildHistory to update the build history
+                
+
                 System.out.println("History updated");
 
 
