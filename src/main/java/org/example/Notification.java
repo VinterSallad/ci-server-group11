@@ -11,6 +11,7 @@ import java.util.Base64;
 public class Notification {
 
     private CloseableHttpClient httpClient = null;
+    private static final String GITHUB_API_VERSION = "2022-11-28";
 
     /**
      * Setter method for httpClient
@@ -41,7 +42,7 @@ public class Notification {
             HttpPost httpPost = new HttpPost(url);
             httpPost.setHeader("Accept", "application/vnd.github.v3+json");
             httpPost.setHeader("Authorization", "Bearer " + decodedString);
-            httpPost.setHeader("X-GitHub-API-Version", "2022-11-28");
+            httpPost.setHeader("X-GitHub-API-Version", GITHUB_API_VERSION);
             StringEntity entity = new StringEntity("{\n" +
                     "  \"state\": \"" + state + "\",\n" +
                     "  \"description\": \"" + description + "\",\n" +
