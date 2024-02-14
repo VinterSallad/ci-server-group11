@@ -73,7 +73,7 @@ public class Main extends AbstractHandler {
     }
 
 
-    //converts file content into a string object
+    // Converts file content into a string object
     private String readFile(String filePath) {
         try {
             StringBuilder sb = new StringBuilder();
@@ -125,16 +125,17 @@ public class Main extends AbstractHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
-        //GitHub sends HTTP POST request and we extract the type of event it is and act accordingly
-        //we are interested in "push" https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
+        // GitHub sends HTTP POST request and we extract the type of event it is and act accordingly
+        // we are interested in "push" https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
         String githubEvent = request.getHeader("X-GitHub-Event");
 
-        //Example
+        // Example
         if(Objects.equals(githubEvent, "ping")) {
             System.out.println("GitHub successfully communicated with the server!");
         }
 
         if(Objects.equals(githubEvent, "push")) {
+            // Extract the payload from the request
             BufferedReader bufferedReader = request.getReader();
             JSONObject payload = readerToJSON(bufferedReader);
             bufferedReader.close();
@@ -145,33 +146,29 @@ public class Main extends AbstractHandler {
             System.out.println(repo);
             System.out.println(ref);
 
-            // here you do all the continuous integration tasks
+            // Here you do all the continuous integration tasks,
             // for example
             int error = cloneRepo(repo, ref);
             if (error == ERRNONE) {
                 System.out.println("cloned without any issues");
 
-                //compile and test cloned project
+                // Compile and test cloned project
                 String[] TestAndCompileResult = compileTest.compileAndTest();
 
-                //Extract the commit identifier
+                // Extract the commit identifier
                 String SHA = payload.getString("after");
                 String log = TestAndCompileResult[2];
                 String date = TestAndCompileResult[1];
 
-                //Remove linebreaks in log to be compatible with below functions
-                //log = log.replaceAll("\\n", "");
+                // Remove linebreaks in log to be compatible with below functions
+                // log = log.replaceAll("\\n", "");
                 
                 History history = new History();
-                history.updateBuildHistory(date, SHA, log);
-                history.getBuildHistoryHTML();
 
                 //call updateBuildHistory to update the build history
-                
-
-
+                history.updateBuildHistory(date, SHA, log);
+                history.getBuildHistoryHTML();
                 System.out.println("History updated");
-
 
                 //notify the status of the build
                 Notification notification = new Notification();
@@ -186,26 +183,20 @@ public class Main extends AbstractHandler {
                 } else {
                     notification.notifyStatus("failure", TestAndCompileResult[0], token, statusUrl);
                 }
-
             }
-
         }
         
-        if(target.equals("/history") ){
-
+        if (target.equals("/history") ) {
             System.out.println("Accessing build history log");
-
         }
         System.out.println(target);
-
-        
 
         response.getWriter().println("CI job done");
 
         System.out.println("This is the end of handle");
     }
 
-    // used to start the CI server in command line
+    // Used to start the CI server in command line
     public static void main(String[] args) throws Exception {
         System.out.println("Hello World");
 

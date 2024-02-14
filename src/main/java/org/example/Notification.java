@@ -35,15 +35,20 @@ public class Notification {
      */
     public String notifyStatus (String state, String description, String token, String url) 
     {
+        // Decode the token
         byte[] decodedBytes = Base64.getDecoder().decode(token);
         String decodedString = new String(decodedBytes);
         try {
-            if(httpClient == null)
-                httpClient = HttpClients.createDefault(); 
+            if (httpClient == null)
+                httpClient = HttpClients.createDefault();
+
+            // Create the HTTP POST request to send the status to the GitHub API 
             HttpPost httpPost = new HttpPost(url);
             httpPost.setHeader("Accept", ACCEPT_HEADER);
             httpPost.setHeader("Authorization", "Bearer " + decodedString);
             httpPost.setHeader("X-GitHub-API-Version", GITHUB_API_VERSION);
+
+            // Create the JSON entity to send the status
             StringEntity entity = new StringEntity("{\n" +
                     "  \"state\": \"" + state + "\",\n" +
                     "  \"description\": \"" + description + "\",\n" +
