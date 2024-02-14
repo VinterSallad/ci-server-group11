@@ -2,6 +2,29 @@
 
 This project was created for "Assignment 2: Continuous Integration" of the course VT24 DD2480 - Software Engineering Fundamentals at KTH Royal Institute of Technology. 
 
+## Commit Structure/Protocol
+
+The commit structure is as follows, a keyword that describes the type of changes made in the commit such as "feat" or 
+"fix" followed by a colon and a short description of the commit. This line should end with referring
+to related issues in parentheses i.e. (#1). You can also use the Close keyword
+to close the issue with the commit i.e. (Close #1). If the commit is related to
+multiple issues you can keep on referring to them i.e. (#1) (#2) (#3). Lastly
+there is an optional segment for when a longer description of the commit is required.
+
+```
+<Keyword> : <Short Description> <Related Issues>
+
+<Long Description> (Optional)
+```
+
+```
+<Keyword> = feat, fix etc.
+
+<Description> = Description of commit content
+
+<Related Issues> = Issues related to commit i.e. (#1), can also do (Close #1), can also refer to multiple i.e. (#1) (#2)
+```
+
 ## Lite Continuous Integration (CI) Server
 
 The focus of this project was to develop a small continuous integration (CI) server containing some basic, core features of continuous integration which were; #1 Compilation, #2 Testing, #3 Notification and a bonus feature of retaining logs of the historic builds.
