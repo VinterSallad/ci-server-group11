@@ -25,6 +25,13 @@ there is an optional segment for when a longer description of the commit is requ
 <Related Issues> = Issues related to commit i.e. (#1), can also do (Close #1), can also refer to multiple i.e. (#1) (#2)
 ```
 
+An example commit message could be:
+```
+feat : implemented binary search (Close #9) (#10)
+
+binary search was implemented in the binarysearch.java file using the pseudocode for binary search in wikipedia.
+```
+
 ## Lite Continuous Integration (CI) Server
 
 The focus of this project was to develop a small continuous integration (CI) server containing some basic, core features of continuous integration which were; #1 Compilation, #2 Testing, #3 Notification and a bonus feature of retaining logs of the historic builds.

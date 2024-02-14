@@ -154,21 +154,6 @@ public class Main extends AbstractHandler {
                 //compile and test cloned project
                 String[] TestAndCompileResult = compileTest.compileAndTest();
 
-                //String filePath = "./mvn.log";
-
-                //Get the mvn log into a string
-                //String log = readFile(filePath);
-
-                //Extract the mvn build date from above string
-                //String[] info = log.split("\\n");
-                //String date = "";
-                //Ugly and unsafe solution, better to incorporate this process into compileAndTest
-                //try {
-                //    date = info[info.length-2].split(": ")[1];
-                //} catch (IndexOutOfBoundsException e) {
-                //    date = info[info.length-13].split(": ")[1];
-                //}
-
                 //Extract the commit identifier
                 String SHA = payload.getString("after");
                 String log = TestAndCompileResult[2];
@@ -184,13 +169,15 @@ public class Main extends AbstractHandler {
                 //call updateBuildHistory to update the build history
                 
 
+
                 System.out.println("History updated");
 
 
                 //notify the status of the build
                 Notification notification = new Notification();
 
-                String token = "Z2hwX3hSQm9KSU5DcUJybXhoV1A5QnFhbGZxRnhBT0pySTFjZ0xZNQ==";
+                //Put your personal access token here
+                String token = "";
 
                 String statusUrl = getGitHubStatusUrl(payload);
 
